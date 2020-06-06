@@ -1,59 +1,60 @@
-class matcher: #mainly reduces code size(by 22 lines). Looks cool too
+class Matcher: #mainly reduces code size(by 22 lines). Looks cool too
 	def nextState(self, currentState, char, table):
 		try:
 			state = table[currentState][char]
-		except(KeyError):
+		except(KeyError, IndexError):
 			state = currentState
 		return state
 
-class ckey(matcher):
-	stateTable = [ #hash-table of states indexed by state number
-		#qf = 999
+class CKey(Matcher):
+	qf = 12 #final state
+	stateTable = [ #hash-table of states indexed by state number		
 		{"o": 1, "h": 8, "a": 10}, #q0
 		{"n": 2}, #q1
 		{"s": 3, "t": 4}, #q2
-		{"t": 999}, #q3
+		{"t": qf}, #q3
 		{"i": 5}, #q4
 		{"n": 6}, #q5
 		{"u": 7}, #q6
-		{"e": 999}, #q7
+		{"e": qf}, #q7
 		{"a": 9}, #q8
-		{"r": 999}, #q9
+		{"r": qf}, #q9
 		{"s": 11}, #q10
-		{"e": 999} #q11
+		{"e": qf} #q11
 	]
 	def match(self, currentState, char): #NOTE: every class should have this exact function
 		return super().nextState(currentState, char, self.stateTable)
 
-def keyMatch(word):
-	#TODO: extend this to be a general function
-	if word[0] == "c": #for other starting chars, create object of the corresponding class
-		matchObj = ckey()
-	else: #otherwise not a keyword
-		print("Not a currently known keyword")
+class KeywordMatcher:
+	def keyMatch(self, word):
+		#TODO: extend this to be a general function
 
-	#this portion remains unchanged
+		if word[0] == "c": #for other starting chars, create object of the corresponding class
+			matchObj = CKey()
+		else: #otherwise not a keyword
+			return False
 
-	state = 0
-	prevState = 0
+		#this portion remains unchanged
 
-	for ch in word[1:]: #program already knows what it starts with
-		if state == 999: #if string still has characters while in final state,
-			return False #not a keyword
+		state = 0
+		prevState = 0
 
-		prevState = state
-		state = matchObj.match(state, ch) #get new state
+		for ch in word[1:]: #program already knows what it starts with
+			prevState = state
+			state = matchObj.match(state, ch) #get new state
 
-		if state == prevState: #if there is no state transition,
-			return False #not a keyword
+			if state == prevState: #if there is no state transition,
+				return False #not a keyword
 
-	if state == 999: #if the DFA has reached its final state and has no more characters to read
-		return True #keyword found!
+		if state == matchObj.qf: #if the DFA has reached its final state and has no more characters to read
+			return True #keyword found!
 
 
 word = input() #for testing only. Final program will just import this module and pass the word to be tested to it.
 
-if keyMatch(word):
+kwmatch = KeywordMatcher()
+
+if kwmatch.keyMatch(word):
 	print("Keyword detected!")
 else:
 	print("Not a keyword.")
