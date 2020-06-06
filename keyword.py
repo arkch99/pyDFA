@@ -1,9 +1,10 @@
-class Matcher: #mainly reduces code size(by 22 lines). Looks cool too
+class Matcher: #mainly reduces code size. Looks cool too
+	qd = -1 #dead state
 	def nextState(self, currentState, char, table):
 		try:
 			state = table[currentState][char]
 		except(KeyError, IndexError):
-			state = currentState
+			state = self.qd
 		return state
 
 class CKey(Matcher):
@@ -36,14 +37,13 @@ class KeywordMatcher:
 
 		#this portion remains unchanged
 
-		state = 0
-		prevState = 0
+		state = 0		
 
 		for ch in word[1:]: #program already knows what it starts with
-			prevState = state
+			
 			state = matchObj.match(state, ch) #get new state
 
-			if state == prevState: #if there is no state transition,
+			if state == matchObj.qd: #if there is no state transition,
 				return False #not a keyword
 
 		if state == matchObj.qf: #if the DFA has reached its final state and has no more characters to read
