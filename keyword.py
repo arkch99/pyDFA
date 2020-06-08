@@ -25,6 +25,23 @@ class CKey(Matcher):
 	]
 	def match(self, currentState, char): #NOTE: every class should have this exact function
 		return super().nextState(currentState, char, self.stateTable)
+	
+class rKey(Matcher):
+	qf = 10 #final state
+	stateTable = [ #hash-table of states indexed by state number
+		{"e": 1}, #q0
+		{"t": 2, "g":5}, #q1
+		{"u": 3}, #q2
+		{"r": 4}, #q3
+		{"n": qf}, #q4
+		{"i": 6}, #q5
+		{"s": 7}, #q6
+		{"t": 8}, #q7
+		{"e": 9}, #q8
+		{"r": qf}, #q9
+	]
+	def match(self, currentState, char): 
+		return super().nextState(currentState, char, self.stateTable)
 
 class KeywordMatcher:
 	def keyMatch(self, word):
@@ -32,6 +49,8 @@ class KeywordMatcher:
 
 		if word[0] == "c": #for other starting chars, create object of the corresponding class
 			matchObj = CKey()
+		elif word[0] == "r": 
+			matchObj = rKey()
 		else: #otherwise not a keyword
 			return False
 
