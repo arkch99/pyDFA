@@ -23,8 +23,10 @@ class CKey(Matcher):
 		{"s": 11}, #q10
 		{"e": qf} #q11
 	]
+	def match(self, currentState, char): #NOTE: every class should have this exact function
+		return super().nextState(currentState, char, self.stateTable)
 	
-	class rKey(Matcher):
+class rKey(Matcher):
 	qf = 10 #final state
 	stateTable = [ #hash-table of states indexed by state number
 		{"e": 1}, #q0
@@ -38,7 +40,7 @@ class CKey(Matcher):
 		{"e": 9}, #q8
 		{"r": qf}, #q9
 	]
-	def match(self, currentState, char): #NOTE: every class should have this exact function
+	def match(self, currentState, char): 
 		return super().nextState(currentState, char, self.stateTable)
 
 class KeywordMatcher:
