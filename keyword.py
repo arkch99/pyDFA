@@ -1,5 +1,5 @@
 class Matcher: #mainly reduces code size. Looks cool too
-	qd = -1 #dead state
+	qd = 999 #dead state
 	def nextState(self, currentState, char, table):
 		try:
 			state = table[currentState][char]
@@ -9,7 +9,7 @@ class Matcher: #mainly reduces code size. Looks cool too
 
 class CKey(Matcher):
 	qf = 12 #final state
-	stateTable = [ #hash-table of states indexed by state number		
+	stateTable = [ #hash-table of states indexed by state number
 		{"o": 1, "h": 8, "a": 10}, #q0
 		{"n": 2}, #q1
 		{"s": 3, "t": 4}, #q2
@@ -37,17 +37,14 @@ class KeywordMatcher:
 
 		#this portion remains unchanged
 
-		state = 0		
+		state = 0
 
 		for ch in word[1:]: #program already knows what it starts with
-			
 			state = matchObj.match(state, ch) #get new state
-
-			if state == matchObj.qd: #if there is no state transition,
-				return False #not a keyword
-
 		if state == matchObj.qf: #if the DFA has reached its final state and has no more characters to read
 			return True #keyword found!
+		else:
+			return False
 
 
 word = input() #for testing only. Final program will just import this module and pass the word to be tested to it.
