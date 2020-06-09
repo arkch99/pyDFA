@@ -86,14 +86,4 @@ class KeywordMatcher:
             return True  # keyword found!
         else:
             return False
-<<<<<<< HEAD
-=======
 
-
-word = input()
-
-if KeywordMatcher().keyMatch(word):
-    print("Valid keyword")
-else:
-    print("Not a keyword")
->>>>>>> c5cfe8062c7b0550295749426f4d33f41f6872d5
