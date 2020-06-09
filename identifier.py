@@ -1,8 +1,8 @@
-import keyword
+import keywords
 import string
 
 
-class ID(keyword.Matcher):
+class ID(keywords.Matcher):
     qf = 1
     alpha_list = list(string.ascii_lowercase + string.ascii_uppercase + "_")  # alphabet list + "_"
     alnum_list = list(string.digits + string.ascii_lowercase + string.ascii_uppercase + "_")  # alphabet list +
@@ -31,7 +31,7 @@ def IDMatch(word):
 
 word = input()
 
-if IDMatch(word) and not keyword.KeywordMatcher().keyMatch(word):
+if IDMatch(word) and not keywords.KeywordMatcher().keyMatch(word):
     print("Valid identifier")
 else:
     print("Not a valid one")
