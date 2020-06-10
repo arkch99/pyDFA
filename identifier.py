@@ -16,22 +16,14 @@ class ID(keywords.Matcher):
     def match(self, currentState, char):
         return super().nextState(currentState, char, self.stateTable)
 
+class GenericIDMatcher:
+    def IDMatch(self, word):
+        matchObj = ID()
+        state = 0
 
-def IDMatch(word):
-    matchObj = ID()
-    state = 0
-
-    for ch in word:
-        state = matchObj.match(state, ch)  # go to new state
-    if state == matchObj.qf:
-        return True  # valid ID
-    else:
-        return False
-
-
-word = input()
-
-if IDMatch(word) and not keywords.KeywordMatcher().keyMatch(word):
-    print("Valid identifier")
-else:
-    print("Not a valid one")
+        for ch in word:
+            state = matchObj.match(state, ch)  # go to new state
+        if state == matchObj.qf:
+            return True  # valid ID
+        else:
+            return False
