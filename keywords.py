@@ -64,15 +64,14 @@ class DKey(Matcher):
 
 
 class KeywordMatcher:
-    @staticmethod
-    def keyMatch(w):
+    def keyMatch(self, word):
         # TODO: extend this to be a general function
 
-        if w[0] == "c":  # for other starting chars, create object of the corresponding class
+        if word[0] == "c":  # for other starting chars, create object of the corresponding class
             matchObj = CKey()
-        elif w[0] == "r":
+        elif word[0] == "r":
             matchObj = RKey()
-        elif w[0] == "d":
+        elif word[0] == "d":
             matchObj = DKey()
         else:  # otherwise not a keyword
             return False
@@ -81,11 +80,10 @@ class KeywordMatcher:
 
         state = 0
 
-        for ch in w[1:]:  # program already knows what it starts with
+        for ch in word[1:]:  # program already knows what it starts with
             state = matchObj.match(state, ch)  # get new state
         if state == matchObj.qf:  # if the DFA has reached its final state and has no more characters to read
             return True  # keyword found!
         else:
             return False
-
 
