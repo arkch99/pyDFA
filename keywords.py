@@ -1,11 +1,12 @@
-class Matcher:  # mainly reduces code size. Looks cool too
-    qd = 999  # dead state
+# Keywords recognised: case, char, const, continue, do, double, if, int, register, return,
 
+class Matcher:
+    qd = 999  # dead state
     def nextState(self, currentState, char, table):
         try:
-            state = table[currentState][char]
-        except(KeyError, IndexError):
-            state = self.qd
+            state = table[currentState][char] #fetch state corresponding to the character read and the current state
+        except(KeyError, IndexError): #if requested transition is not defined
+            state = self.qd #then go to the dead state
         return state
 
 
@@ -26,13 +27,13 @@ class CKey(Matcher):
         {"e": qf}  # q11
     ]
 
-    def match(self, currentState, char):  # NOTE: every class should have this exact function
+    def match(self, currentState, char):
         return super().nextState(currentState, char, self.stateTable)
 
 
 class RKey(Matcher):
     qf = 10  # final state
-    stateTable = [  # hash-table of states indexed by state number
+    stateTable = [
         {"e": 1},  # q0
         {"t": 2, "g": 5},  # q1
         {"u": 3},  # q2
@@ -51,7 +52,7 @@ class RKey(Matcher):
 
 class DKey(Matcher):
     qf = 4  # final state
-    stateTable = [  # hash table
+    stateTable = [
         {"o": qf},  # q0
         {"b": 2},  # q1
         {"l": 3},  # q2
@@ -65,7 +66,7 @@ class DKey(Matcher):
 
 class IKey(Matcher):
     qf = 2  # final state
-    stateTable = [  # hash-table of states indexed by state number
+    stateTable = [
         {"f":qf, "n":1}, #q0
         {"t":qf}, #q1
     ]
@@ -76,9 +77,7 @@ class IKey(Matcher):
 
 class KeywordMatcher:
     def keyMatch(self, word):
-        # TODO: extend this to be a general function
-
-        if word[0] == "c":  # for other starting chars, create object of the corresponding class
+        if word[0] == "c":
             matchObj = CKey()
         elif word[0] == "r":
             matchObj = RKey()
@@ -89,14 +88,12 @@ class KeywordMatcher:
         else:  # otherwise not a keyword
             return False
 
-        # this portion remains unchanged
-
         state = 0
 
-        for ch in word[1:]:  # program already knows what it starts with
+        for ch in word[1:]:  # program already knows what it starts with, so skip first character
             state = matchObj.match(state, ch)  # get new state
         if state == matchObj.qf:  # if the DFA has reached its final state and has no more characters to read
             return True  # keyword found!
         else:
-            return False
+            return False #not a keyword
 
