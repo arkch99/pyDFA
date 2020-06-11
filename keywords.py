@@ -63,6 +63,17 @@ class DKey(Matcher):
         return super().nextState(currentState, char, self.stateTable)
 
 
+class IKey(Matcher):
+    qf = 2  # final state
+    stateTable = [  # hash-table of states indexed by state number
+        {"f":qf, "n":1}, #q0
+        {"t":qf}, #q1
+    ]
+
+    def match(self, currentState, char):
+        return super().nextState(currentState, char, self.stateTable)
+
+
 class KeywordMatcher:
     def keyMatch(self, word):
         # TODO: extend this to be a general function
@@ -73,6 +84,8 @@ class KeywordMatcher:
             matchObj = RKey()
         elif word[0] == "d":
             matchObj = DKey()
+        elif word[0] == "i":
+            matchObj = IKey()
         else:  # otherwise not a keyword
             return False
 

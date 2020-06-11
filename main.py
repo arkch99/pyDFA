@@ -8,6 +8,8 @@ keywordObj = keywords.KeywordMatcher()
 
 if genericIDObj.IDMatch(word) and not keywordObj.keyMatch(word):
 	print("'{}' is a valid C identifier.".format(word))
+elif(keywordObj.keyMatch(word)):
+	print("'{}' is a C Keyword.".format(word))
 else:
 	print("'{}' is not a valid C identifier.".format(word))
 
